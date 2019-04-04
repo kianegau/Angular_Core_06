@@ -1,0 +1,74 @@
+<body>
+  <h1 id="title">FA Music Store</h1>
+  <div id="form-outer">
+    <div>
+      <input
+        #inputString
+        id="input-form"
+        [ngModel]="inputString.value"
+        (ngModelChange)="resetValue(inputString.value)"
+        type="text"
+        (keyup.enter)="handleInput(inputString.value)"
+        placeholder="Type to search for an artists"
+      />
+    </div>
+    <div *ngIf="listArtist.length == 0">No Result Search</div>
+    <div class="content" *ngIf="listArtist.length != 0">
+      <ul class="col-12">
+        <li *ngFor="let item of listArtist">
+          <img
+            [src]="
+              (item?.images)[0]?.url == null ? iimagess : (item?.images)[0]?.url
+            "
+            (click)="handleClick(item.id)"
+            style="width: 100%; height: 216px"
+          />
+          <p
+            style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;width: 100%"
+          >
+            Name: {{ item.name }}
+          </p>
+          <p>Popularity: {{ item.popularity }}</p>
+          <p>Type: {{ item.type }}</p>
+        </li>
+      </ul>
+    </div>
+    <hr />
+    <span *ngIf="!isNull">No list top track</span>
+    <span *ngIf="isNull">List Top Track</span>
+    <hr />
+    <div class="top-track" [hidden]="!inputString.value.length > 0">
+      <div *ngFor="let toptrack of listTopTrack" style="width: 100%;">
+        <div style="display: inline-block;width: 30%;">
+          <img
+            [src]="
+              toptrack.album.images[0].url == null
+                ? iimagess
+                : toptrack.album.images[0].url
+            "
+            style="width: 70%; height: 30%"
+          />
+        </div>
+        <div style="display: inline-block;width: 70%;text-align: left">
+          <p style="padding-top: 0px">Type: {{ toptrack.album.type }}</p>
+          <p style="padding-top: 0px">
+            Name:
+            {{ toptrack.album.name }}
+            |
+            {{ toptrack.album.release_date }}
+          </p>
+          <p style="padding-top: 0px;">
+            <audio *ngIf="toptrack.preview_url != null" controls>
+              <source [src]="toptrack.preview_url" type="audio/mp3" />
+            </audio>
+            <span *ngIf="toptrack.preview_url == null">
+              No Preview URL
+            </span>
+          </p>
+        </div>
+        <hr />
+      </div>
+    </div>
+    <!-- <div *ngIf="!isNull">Search not found</div> -->
+  </div>
+</body>
